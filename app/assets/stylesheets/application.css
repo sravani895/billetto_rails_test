@@ -8,3 +8,56 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+.events-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.events-header {
+  margin-bottom: 30px;
+}
+
+.events-header h1 {
+  margin-bottom: 8px;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.event-card {
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.event-card__image {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.event-card__content {
+  padding: 20px;
+}
+
+.event-card__content h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.event-card__date {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.event-card__description {
+  line-height: 1.5;
+  color: #555;
+}

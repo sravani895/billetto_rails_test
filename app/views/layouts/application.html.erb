@@ -6,6 +6,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Billetto Rails Test">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta
+  name="clerk-publishable-key"
+  content="<%= ENV['CLERK_PUBLISHABLE_KEY'] %>"
+>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -24,6 +28,25 @@
   </head>
 
   <body>
+    <nav>
+    <% if clerk.user? %>
+  <h2>Welcome!</h2>
+
+  <p>User ID: <%= clerk.user_id %></p>
+  <p>Email: <%= clerk.user.email_addresses.first.email_address %></p>
+
+  
+    <%= link_to "Sign Out", clerk.sign_out_url %>
+    <% else %>
+      <% if clerk.sign_in_url.present? %>
+        <%= link_to "Sign in", clerk.sign_in_url %>
+      <% end %>
+
+      <% if clerk.sign_up_url.present? %>
+        <%= link_to "Sign up", clerk.sign_up_url %>
+      <% end %>
+    <% end %>
+  </nav>
     <%= yield %>
   </body>
 </html>
