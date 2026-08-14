@@ -5,11 +5,13 @@ one:
   title: MyString
   description: MyText
   start_at: 2026-08-12 09:07:57
-  image_url: MyString
+  image_url: https://example.com/image1.jpg
+  user: one
 
 two:
-  billetto_id: MyString
-  title: MyString
+  billetto_id: MyString2
+  title: User B Event
   description: MyText
   start_at: 2026-08-12 09:07:57
-  image_url: MyString
+  image_url: https://example.com/image2.jpg
+  user: two

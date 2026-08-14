@@ -1,0 +1,64 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: billetto_rails_test_production
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rails_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:postgres_password_dev@db:5432/billetto_rails_test_production
+      RAILS_ENV: production
+      SECRET_KEY_BASE: 8e5f2a1b9c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ./bin/jobs
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      rails_app:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgres://postgres:postgres_password_dev@db:5432/billetto_rails_test_production
+      RAILS_ENV: production
+      SECRET_KEY_BASE: 8e5f2a1b9c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f
+    env_file:
+      - .env
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - rails_app
+
+volumes:
+  postgres_data:

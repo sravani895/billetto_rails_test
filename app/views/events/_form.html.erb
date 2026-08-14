@@ -1,0 +1,42 @@
+<%= form_with(model: event, class: "event-form") do |form| %>
+  <% if event.errors.any? %>
+    <div class="form-errors alert alert-danger" style="margin-bottom: 24px; padding: 16px; background-color: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; color: #991b1b;">
+      <h2 style="font-size: 16px; font-weight: 600; margin-top: 0; margin-bottom: 8px;"><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
+      <ul style="margin: 0; padding-left: 20px;">
+        <% event.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-field">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-input", placeholder: "e.g. Summer Music Festival", required: true %>
+  </div>
+
+  <div class="form-field">
+    <%= form.label :billetto_id, "Billetto ID", class: "form-label" %>
+    <%= form.text_field :billetto_id, class: "form-input", placeholder: "e.g. BLT-12345", required: true %>
+  </div>
+
+  <div class="form-field">
+    <%= form.label :start_at, "Start Date & Time", class: "form-label" %>
+    <%= form.datetime_field :start_at, class: "form-input", required: true %>
+  </div>
+
+  <div class="form-field">
+    <%= form.label :image_url, "Image URL", class: "form-label" %>
+    <%= form.url_field :image_url, class: "form-input", placeholder: "https://example.com/image.jpg" %>
+  </div>
+
+  <div class="form-field">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, rows: 5, class: "form-textarea", placeholder: "Event details and schedule..." %>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", events_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

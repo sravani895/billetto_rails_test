@@ -1,0 +1,111 @@
+<div class="events-page">
+  <div class="events-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+      <h1>User Profile</h1>
+      <p style="color: #64748b; margin-top: 4px;">Overview of your Rails user and Clerk authentication profile.</p>
+    </div>
+    <div>
+      <%= link_to "Events", events_path, class: "btn btn-secondary" %>
+      <%= link_to "New Event", new_event_path, class: "btn btn-primary", style: "margin-left: 8px;" %>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+    <!-- Rails Database User Card -->
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+        <span style="background-color: #dbeafe; color: #1e40af; font-weight: 700; padding: 4px 10px; border-radius: 20px; font-size: 13px;">Rails Record</span>
+        <h2 style="margin: 0; font-size: 20px; color: #0f172a;">Application User</h2>
+      </div>
+
+      <% if @user %>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #334155;">
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Database ID</strong>
+            <div style="font-family: monospace; font-size: 14px; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0; margin-top: 2px;">
+              <%= @user.id %>
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Clerk User ID</strong>
+            <div style="font-family: monospace; font-size: 13px; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0; margin-top: 2px; word-break: break-all;">
+              <%= @user.clerk_user_id %>
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Name</strong>
+            <div style="font-weight: 600; color: #0f172a; margin-top: 2px;">
+              <%= @user.name.presence || "Not specified" %>
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Email</strong>
+            <div style="font-weight: 600; color: #0f172a; margin-top: 2px;">
+              <%= @user.email.presence || "Not specified" %>
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Events Created</strong>
+            <div style="font-weight: 600; color: #2563eb; margin-top: 2px;">
+              <%= @user.events.count %> events
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Record Created</strong>
+            <div style="color: #64748b; font-size: 13px; margin-top: 2px;">
+              <%= @user.created_at.strftime("%B %-d, %Y at %-I:%M %p") %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <p style="color: #94a3b8;">No Rails user record found.</p>
+      <% end %>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+        <span style="background-color: #f3e8ff; color: #6b21a8; font-weight: 700; padding: 4px 10px; border-radius: 20px; font-size: 13px;">Clerk Auth</span>
+        <h2 style="margin: 0; font-size: 20px; color: #0f172a;">Clerk Account</h2>
+      </div>
+
+      <% if @clerk_user %>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #334155;">
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Clerk User ID</strong>
+            <div style="font-family: monospace; font-size: 13px; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0; margin-top: 2px; word-break: break-all;">
+              <%= clerk.user_id %>
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Primary Email</strong>
+            <div style="font-weight: 600; color: #0f172a; margin-top: 2px;">
+              <%= @clerk_user.email_addresses.first&.email_address || "N/A" %>
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">First Name</strong>
+            <div style="font-weight: 600; color: #0f172a; margin-top: 2px;">
+              <%= @clerk_user.first_name.presence || "N/A" %>
+            </div>
+          </div>
+
+          <div>
+            <strong style="color: #64748b; font-size: 13px; text-transform: uppercase;">Last Name</strong>
+            <div style="font-weight: 600; color: #0f172a; margin-top: 2px;">
+              <%= @clerk_user.last_name.presence || "N/A" %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <p style="color: #94a3b8;">Clerk user details not available.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

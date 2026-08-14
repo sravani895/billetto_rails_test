@@ -1,13 +1,14 @@
 module Billetto
   class EventImporter
-    def initialize(client: Billetto::Client.new)
+    def initialize(user:, client: Billetto::Client.new)
+      @user = user
       @client = client
     end
 
     def call(limit: 10)
       response = @client.public_events(limit: limit)
 
-      response.fetch("data").each do |event_data|
+      response.fetch("data").map do |event_data|
         import_event(event_data)
       end
     end
@@ -15,7 +16,7 @@ module Billetto
     private
 
     def import_event(event_data)
-      event = Event.find_or_initialize_by(
+      event = @user.events.find_or_initialize_by(
         billetto_id: event_data.fetch("id").to_s
       )
 
@@ -27,6 +28,7 @@ module Billetto
       )
 
       event.save!
+      event
     end
   end
 end
